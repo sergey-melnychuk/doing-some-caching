@@ -3,12 +3,25 @@
  */
 package io.github.sergey_melnychuk.cache;
 
+import java.util.stream.IntStream;
+
 public class App {
     public String getGreeting() {
         return "Hello world.";
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        Cache<String, String> cache = new CacheImpl<>(new SizeBoundEvictionPolicy<>(7));
+
+        IntStream.range(0, 10).forEach(i -> {
+            String key = String.valueOf(i);
+            cache.put(key, "{}");
+            System.out.println("insert " + key);
+        });
+
+        IntStream.range(0, 10).forEach(i -> {
+            String key = String.valueOf(i);
+            System.out.println("check " + key + " : " + cache.get(key).isPresent());
+        });
     }
 }
