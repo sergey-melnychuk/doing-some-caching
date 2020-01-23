@@ -20,7 +20,7 @@ public class ExpirationEvictionPolicy<T> implements EvictionPolicy<T> {
 
     @Override
     public boolean keep(T value) {
-        boolean keep = timeForEntry.getOrDefault(value, 0L) < clock.get();
+        boolean keep = timeForEntry.getOrDefault(value, 0L) < clock.get() - ttl.toMillis();
         if (!keep) {
             timeForEntry.remove(value);
         }

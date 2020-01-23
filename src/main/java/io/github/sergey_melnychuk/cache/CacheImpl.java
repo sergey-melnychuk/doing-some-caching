@@ -23,6 +23,7 @@ public class CacheImpl<K, V> implements Cache<K, V>, Evictable<K> {
             return Optional.empty();
         }
         V value = cache.get(key);
+        evictionPolicy.onGet(key);
         return Optional.of(value);
     }
 
