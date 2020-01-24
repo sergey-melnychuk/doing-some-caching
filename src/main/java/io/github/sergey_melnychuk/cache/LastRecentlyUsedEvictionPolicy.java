@@ -21,7 +21,8 @@ public class LastRecentlyUsedEvictionPolicy<T> implements EvictionPolicy<T> {
 
     @Override
     public boolean keep(T value) {
-        boolean keep = seenForValue.getOrDefault(value, 0L) < clock.get() - ttl.toMillis();
+        long time = seenForValue.getOrDefault(value, 0L);
+        boolean keep = clock.get() - time < ttl.toMillis();
         if (!keep) {
             seenForValue.remove(value);
         }
