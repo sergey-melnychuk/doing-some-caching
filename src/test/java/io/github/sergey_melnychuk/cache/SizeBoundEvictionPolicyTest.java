@@ -33,6 +33,9 @@ class SizeBoundEvictionPolicyTest {
 
         assertThat(policy.counter.get()).isEqualTo(2);
         assertThat(policy.queue).containsExactly(new SizeBoundEvictionPolicy.Entry<>("hola", 2));
+
+        assertThat(policy.keep("hello")).isTrue();
+        assertThat(policy.keep("hola")).isTrue();
     }
 
 }

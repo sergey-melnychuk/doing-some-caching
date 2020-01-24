@@ -50,12 +50,8 @@ public class SizeBoundEvictionPolicy<T> implements EvictionPolicy<T> {
 
     @Override
     public boolean keep(T value) {
-        if (queue.size() <= maxSize) {
-            return true;
-        }
         if (value.equals(queue.first().value)) {
-            queue.pollFirst();
-            return false;
+            return queue.size() <= maxSize;
         }
         return true;
     }
@@ -71,5 +67,8 @@ public class SizeBoundEvictionPolicy<T> implements EvictionPolicy<T> {
         Entry<T> entry = new Entry<>(value, index);
         queue.remove(entry);
         queue.add(entry);
+        if (queue.size() > maxSize) {
+            queue.pollFirst();
+        }
     }
 }
