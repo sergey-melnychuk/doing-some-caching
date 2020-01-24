@@ -8,7 +8,7 @@ public interface EvictionPolicy<T> {
 
     void onPut(T value);
 
-    default <U extends T> EvictionPolicy<U> chain(EvictionPolicy<U> rhs) {
+    default <U extends T> EvictionPolicy<U> and(EvictionPolicy<U> rhs) {
         EvictionPolicy<T> lhs = this;
         return new EvictionPolicy<U>() {
             @Override
