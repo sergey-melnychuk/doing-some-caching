@@ -31,6 +31,11 @@ public class SizeBoundEvictionPolicy<T> implements EvictionPolicy<T> {
         public int hashCode() {
             return Objects.hash(value);
         }
+
+        @Override
+        public String toString() {
+            return "Entry{value=" + value + ", index=" + index + '}';
+        }
     }
 
     private static final Comparator<Entry<?>> COMPARATOR = Comparator.comparing((Entry<?> e) -> e.index);
