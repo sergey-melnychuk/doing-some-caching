@@ -24,8 +24,8 @@ public interface EvictionPolicy<T> {
 
             @Override
             public void onPut(U value) {
-                lhs.onGet(value);
-                rhs.onGet(value);
+                lhs.onPut(value);
+                rhs.onPut(value);
             }
         };
     }
