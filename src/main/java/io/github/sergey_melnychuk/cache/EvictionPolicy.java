@@ -1,5 +1,7 @@
 package io.github.sergey_melnychuk.cache;
 
+import java.time.Duration;
+
 public interface EvictionPolicy<T> {
 
     boolean keep(T value);
@@ -28,5 +30,17 @@ public interface EvictionPolicy<T> {
                 rhs.onPut(value);
             }
         };
+    }
+
+    static <T> EvictionPolicy<T> ttl(Duration ttl) {
+        return new ExpirationEvictionPolicy<>(ttl);
+    }
+
+    static <T> EvictionPolicy<T> lru(Duration ttl) {
+        return new LastRecentlyUsedEvictionPolicy<>(ttl);
+    }
+
+    static <T> EvictionPolicy<T> size(long size) {
+        return new SizeBoundEvictionPolicy<>(size);
     }
 }
