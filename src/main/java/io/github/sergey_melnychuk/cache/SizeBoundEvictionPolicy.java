@@ -18,24 +18,6 @@ public class SizeBoundEvictionPolicy<T> implements EvictionPolicy<T> {
             this.value = value;
             this.index = index;
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Entry<?> entry = (Entry<?>) o;
-            return value.equals(entry.value);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(value);
-        }
-
-        @Override
-        public String toString() {
-            return "Entry{value=" + value + ", index=" + index + '}';
-        }
     }
 
     private static final Comparator<Entry<?>> COMPARATOR = Comparator.comparing((Entry<?> e) -> e.index);
