@@ -3,6 +3,7 @@ package io.github.sergey_melnychuk.cache;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SizeBoundEvictionPolicyTest {
 
@@ -36,6 +37,23 @@ class SizeBoundEvictionPolicyTest {
 
         assertThat(policy.keep("hello")).isTrue();
         assertThat(policy.keep("hola")).isTrue();
+    }
+
+    @Test void testEntryWithNullValue() {
+        assertThatThrownBy(() -> new SizeBoundEvictionPolicy.Entry<String>(null, 0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("value can not be null.");
+    }
+
+    @Test void testGetDoesNotChangeState() {
+        SizeBoundEvictionPolicy<String> policy = makePolicy(1);
+        policy.onPut("hello");
+        policy.onGet("hello");
+
+        assertThat(policy.counter.get()).isEqualTo(1);
+        assertThat(policy.queue).containsExactly(new SizeBoundEvictionPolicy.Entry<>("hello", 1));
+
+        assertThat(policy.keep("hello")).isTrue();
     }
 
 }
