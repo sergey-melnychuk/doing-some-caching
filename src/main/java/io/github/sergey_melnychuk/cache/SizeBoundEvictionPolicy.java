@@ -33,12 +33,11 @@ public class SizeBoundEvictionPolicy<T> implements EvictionPolicy<T> {
         }
     }
 
-    private final AtomicLong counter = new AtomicLong(0L);
-
-    private final Comparator<Entry<T>> cmp = Comparator.comparing((Entry<T> e) -> e.index);
-    private final ConcurrentSkipListSet<Entry<T>> queue = new ConcurrentSkipListSet<>(cmp);
+    private static final Comparator<Entry<?>> COMPARATOR = Comparator.comparing((Entry<?> e) -> e.index);
 
     private final long maxSize;
+    final ConcurrentSkipListSet<Entry<T>> queue = new ConcurrentSkipListSet<>(COMPARATOR);
+    final AtomicLong counter = new AtomicLong(0L);
 
     public SizeBoundEvictionPolicy(long maxSize) {
         this.maxSize = maxSize;

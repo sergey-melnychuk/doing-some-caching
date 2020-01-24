@@ -5,9 +5,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 public class ExpirationEvictionPolicy<T> implements EvictionPolicy<T> {
-    private final ConcurrentHashMap<T, Long> timeForEntry = new ConcurrentHashMap<>();
     private final Duration ttl;
     private final Supplier<Long> clock;
+
+    final ConcurrentHashMap<T, Long> timeForEntry = new ConcurrentHashMap<>();
 
     public ExpirationEvictionPolicy(Duration ttl, Supplier<Long> clock) {
         this.ttl = ttl;

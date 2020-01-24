@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class CacheImpl<K, V> implements Cache<K, V>, Evictable<K> {
-    private final EvictionPolicy<K> evictionPolicy;
-    private final ConcurrentHashMap<K, V> cache = new ConcurrentHashMap<>();
+    final EvictionPolicy<K> evictionPolicy;
+    final ConcurrentHashMap<K, V> cache = new ConcurrentHashMap<>();
 
     public CacheImpl(EvictionPolicy<K> evictionPolicy) {
         this.evictionPolicy = evictionPolicy;
