@@ -3,6 +3,7 @@
  */
 package io.github.sergey_melnychuk.cache;
 
+import java.time.Duration;
 import java.util.stream.IntStream;
 
 public class App {
@@ -11,7 +12,8 @@ public class App {
     }
 
     public static void main(String[] args) {
-        Cache<String, String> cache = new CacheImpl<>(new SizeBoundEvictionPolicy<>(7));
+        EvictionPolicy<String> ep = EvictionPolicy.size(7).and(EvictionPolicy.ttl(Duration.ofMillis(1)));
+        Cache<String, String> cache = new CacheImpl<>(ep);
 
         IntStream.range(0, 10).forEach(i -> {
             String key = String.valueOf(i);
