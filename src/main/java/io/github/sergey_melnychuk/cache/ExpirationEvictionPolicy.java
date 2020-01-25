@@ -5,22 +5,23 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 public class ExpirationEvictionPolicy<T> implements EvictionPolicy<T> {
-    private final ConcurrentHashMap<T, Long> timeForEntry = new ConcurrentHashMap<>();
     private final Duration ttl;
     private final Supplier<Long> clock;
+
+    final ConcurrentHashMap<T, Long> timeForEntry = new ConcurrentHashMap<>();
 
     public ExpirationEvictionPolicy(Duration ttl, Supplier<Long> clock) {
         this.ttl = ttl;
         this.clock = clock;
     }
 
-    public ExpirationEvictionPolicy(Duration ttl) {
-        this(ttl, System::currentTimeMillis);
-    }
-
     @Override
     public boolean keep(T value) {
-        boolean keep = timeForEntry.getOrDefault(value, 0L) < clock.get() - ttl.toMillis();
+        if (!timeForEntry.containsKey(value)) {
+            return false;
+        }
+        long time = timeForEntry.getOrDefault(value, 0L);
+        boolean keep = clock.get() - time < ttl.toMillis();
         if (!keep) {
             timeForEntry.remove(value);
         }
@@ -29,7 +30,7 @@ public class ExpirationEvictionPolicy<T> implements EvictionPolicy<T> {
 
     @Override
     public void onGet(T value) {
-        // nothing to do
+        keep(value);
     }
 
     @Override
