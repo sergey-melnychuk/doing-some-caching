@@ -15,23 +15,27 @@ public class LastRecentlyUsedEvictionPolicy<T> implements EvictionPolicy<T> {
         this.clock = clock;
     }
 
-    public LastRecentlyUsedEvictionPolicy(Duration ttl) {
-        this(ttl, System::currentTimeMillis);
-    }
-
     @Override
     public boolean keep(T value) {
+        if (!seenForValue.containsKey(value)) {
+            return false;
+        }
         long time = seenForValue.getOrDefault(value, 0L);
         boolean keep = clock.get() - time < ttl.toMillis();
         if (!keep) {
             seenForValue.remove(value);
+            return false;
         }
-        return keep;
+        return true;
     }
 
     @Override
     public void onGet(T value) {
-        seenForValue.put(value, clock.get());
+        if (keep(value)) {
+            seenForValue.put(value, clock.get());
+        } else {
+            seenForValue.remove(value);
+        }
     }
 
     @Override
