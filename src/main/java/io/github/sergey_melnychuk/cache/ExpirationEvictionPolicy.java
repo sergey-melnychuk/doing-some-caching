@@ -15,12 +15,11 @@ public class ExpirationEvictionPolicy<T> implements EvictionPolicy<T> {
         this.clock = clock;
     }
 
-    public ExpirationEvictionPolicy(Duration ttl) {
-        this(ttl, System::currentTimeMillis);
-    }
-
     @Override
     public boolean keep(T value) {
+        if (!timeForEntry.containsKey(value)) {
+            return false;
+        }
         long time = timeForEntry.getOrDefault(value, 0L);
         boolean keep = clock.get() - time < ttl.toMillis();
         if (!keep) {
@@ -31,7 +30,7 @@ public class ExpirationEvictionPolicy<T> implements EvictionPolicy<T> {
 
     @Override
     public void onGet(T value) {
-        // nothing to do
+        keep(value);
     }
 
     @Override
