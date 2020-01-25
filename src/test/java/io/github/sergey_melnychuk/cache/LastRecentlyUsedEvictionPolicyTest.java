@@ -1,28 +1,14 @@
 package io.github.sergey_melnychuk.cache;
 
+import io.github.sergey_melnychuk.cache.utils.ConstClock;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 
 class LastRecentlyUsedEvictionPolicyTest {
-
-    static class ConstClock implements Supplier<Long> {
-        private long now = 0L;
-
-        public void set(long now) {
-            this.now = now;
-        }
-
-        @Override
-        public Long get() {
-            return now;
-        }
-    }
-
     private static ConstClock clock = new ConstClock();
 
     private static LastRecentlyUsedEvictionPolicy<String> makePolicy(long millis) {
