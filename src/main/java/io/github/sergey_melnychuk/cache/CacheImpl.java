@@ -10,6 +10,9 @@ public class CacheImpl<K, V> implements Cache<K, V>, Evictable<K> {
     final ConcurrentHashMap<K, V> cache = new ConcurrentHashMap<>();
 
     public CacheImpl(EvictionPolicy<K> evictionPolicy) {
+        if (evictionPolicy == null) {
+            throw new IllegalArgumentException("Cache.evictionPolicy can not be null.");
+        }
         this.evictionPolicy = evictionPolicy;
     }
 
