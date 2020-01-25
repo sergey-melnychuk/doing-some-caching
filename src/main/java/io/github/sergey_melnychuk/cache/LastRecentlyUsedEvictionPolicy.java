@@ -33,8 +33,6 @@ public class LastRecentlyUsedEvictionPolicy<T> implements EvictionPolicy<T> {
     public void onGet(T value) {
         if (keep(value)) {
             seenForValue.put(value, clock.get());
-        } else {
-            seenForValue.remove(value);
         }
     }
 

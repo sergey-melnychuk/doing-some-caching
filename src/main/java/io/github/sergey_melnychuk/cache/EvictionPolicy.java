@@ -33,7 +33,7 @@ public interface EvictionPolicy<T> {
     }
 
     static <T> EvictionPolicy<T> ttl(Duration ttl) {
-        return new ExpirationEvictionPolicy<>(ttl);
+        return new ExpirationEvictionPolicy<>(ttl, System::currentTimeMillis);
     }
 
     static <T> EvictionPolicy<T> lru(Duration ttl) {
