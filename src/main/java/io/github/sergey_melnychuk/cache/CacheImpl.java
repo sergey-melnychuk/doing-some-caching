@@ -25,9 +25,8 @@ public class CacheImpl<K, V> implements Cache<K, V>, Evictable<K> {
             cache.remove(key);
             return Optional.empty();
         }
-        V value = cache.get(key);
         evictionPolicy.onGet(key);
-        return Optional.of(value);
+        return Optional.of(cache.get(key));
     }
 
     @Override
